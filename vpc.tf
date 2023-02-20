@@ -26,19 +26,19 @@ module "vpc" {
   enable_dns_hostnames = true
   enable_dns_support = true 
   
-  public_subnet_tags {
+  public_subnet_tags = {
     Name = "public-subnets"
   }
 
-  private_subnet_tags {
+  private_subnet_tags = {
     Name = "private-subnets"
   }
 
-  database_subnet_tags{
+  database_subnet_tags = {
     Name = "database-subnets"
   }
 
-  tags= {
+  tags = {
     Owner = "hanzala"
     Environment = "dev"
   

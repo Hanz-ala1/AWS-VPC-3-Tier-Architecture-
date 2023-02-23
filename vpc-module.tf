@@ -3,24 +3,23 @@ module "vpc" {
   version = "3.19.0"
 
   #VPC Basuc Details
-  name = "vpc-dev"
-  cidr = "10.0.0.0/16"
-  azs                 = ["us-east-1a", "us-east-1b",]
-  private_subnets     = ["10.0.1.0/24", "10.0.2.0/24"]
-  public_subnets      = ["10.0.101.0/24", "10.0.201.0/24"]
-
+  name = "${local.name}-${var.vpc_name}"
+  cidr = var.vpc_cidr_block
+  azs                 = var.vpc_availability_zones
+  private_subnets     = var.vpc_private_subnets
+  public_subnets      = var.vpc_public_subnets
   #datebase subnets
-  create_database_subnet_group = true
-  create_database_subnet_route_table = true
-  database_subnets    = ["10.0.151.0/24", "10.0.152.0/24"]
-  #if you want make database public enable below.
+  create_database_subnet_group = var.vpc_database_subnet_group
+  create_database_subnet_route_table = var.vpc_database_subnet_group_route_table
+  database_subnets    = var.database_subnets
+  #Database made public below 
   #create_database_nat_gateway_route = true
   #create_database_internet_gateway_route = true
   
   # NAT Gateways - Outbound Communication 
-  enable_nat_gateway = true
+  enable_nat_gateway = var.vpc_enable_nat_gateway
   # Single nat gateway to avoid spinning up two and making it expensive.
-  single_nat_gateway = true
+  single_nat_gateway = var.vpc_single_nat_gateway
 
   #VPC DNS Parameters
   enable_dns_hostnames = true
@@ -38,14 +37,7 @@ module "vpc" {
     Name = "database-subnets"
   }
 
-  tags = {
-    Owner = "hanzala"
-    Environment = "dev"
-  
-  }
-  vpc_tags = {
-    Name = "vpc-dev"
-
-  }
+  tags = local.common_tags
+  vpc_tags = local.common_tags
 
 }
